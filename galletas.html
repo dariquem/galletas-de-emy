@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Las Galletas de Emy</title>
+    <!-- Incluye Tailwind CSS para un estilo moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluye el icono de WhatsApp para el botón de contacto -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f1e3;
+            color: #4b3d30;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white/50 backdrop-blur-md sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-[#b76e79]">Emy's Sweet Cookies</a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#about" class="hover:text-[#8e525f] transition duration-300">Nuestra Historia</a>
+                <a href="#products" class="hover:text-[#8e525f] transition duration-300">Productos</a>
+                <a href="#contact" class="hover:text-[#8e525f] transition duration-300">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
+        <!-- Background image of cookies -->
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('http://45.228.175.58/images/galletas.jpg');"></div>
+        <div class="absolute inset-0 bg-black opacity-30"></div>
+        <div class="relative z-10 text-center text-white px-4">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight drop-shadow-lg">Galletas con Amor, Hechas a Mano</h1>
+            <p class="mt-4 text-xl md:text-2xl font-medium drop-shadow-md">Cada bocado es una historia de sabor y alegría.</p>
+            <a href="#products" class="mt-8 inline-block bg-[#8e525f] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#6f404a] transition duration-300 transform hover:scale-105">
+                Ver Nuestras Creaciones
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="container mx-auto px-4 py-16 md:py-24">
+        <div class="flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-[#b76e79]">Nuestra Dulce Historia</h2>
+                <p class="text-lg md:text-xl leading-relaxed">
+                    Soy Emy, una niña de 11 años que ama hornear. Todo empezó como un juego en la cocina con mi papá, y pronto descubrí mi pasión por crear galletas deliciosas y únicas. Cada galleta que horneo está hecha con los mejores ingredientes y, sobre todo, con mucho amor. Mi misión es endulzar los días de las personas con mis creaciones.
+                </p>
+            </div>
+            <div class="md:w-1/2">
+                <!-- Foto de la niña con un fondo profesional de pastelería -->
+                <img src="http://45.228.175.58/images/tres.jpg" alt="Emy horneando" class="rounded-3xl shadow-lg border-4 border-white transform hover:scale-105 transition duration-300">
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="container mx-auto px-4 py-16 md:py-24">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-[#b76e79]">Nuestras Deliciosos Productos</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Product Card 1 -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                <!-- Placeholder for cookie image -->
+                <img src="http://45.228.175.58/images/galletas2.jpg" alt="Galleta de Chispas de Chocolate" class="w-full h-48 object-cover">
+                <div class="p-6 text-center">
+                    <h3 class="text-2xl font-semibold text-[#8e525f] mb-2">Galleta de Avena y Chispas de Chocolate</h3>
+                    <p class="text-gray-600 mb-4">El clásico que nunca falla. Suave por dentro, crujiente por fuera y llena de trozos de chocolate.</p>
+                    <span class="text-2xl font-bold text-[#b76e79]">3 X $0.50</span>
+                </div>
+            </div>
+
+            <!-- Product Card 2 -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                <!-- Placeholder for cookie image -->
+                <img src="http://45.228.175.58/images/brownie.jpg" alt="Galleta de Avena y Pasas" class="w-full h-48 object-cover">
+                <div class="p-6 text-center">
+                    <h3 class="text-2xl font-semibold text-[#8e525f] mb-2">Brownie de chocolate</h3>
+                    <p class="text-gray-600 mb-4">Un toque saludable y lleno de sabor. Con avena integral y pasas jugosas.</p>
+                    <span class="text-2xl font-bold text-[#b76e79]">$0.50 c/u</span>
+                </div>
+            </div>
+
+            <!-- Product Card 3 -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                <!-- Placeholder for cookie image -->
+                <img src="http://45.228.175.58/images/galletas2.jpg" alt="Galleta de Mantequilla con Glaseado" class="w-full h-48 object-cover">
+                <div class="p-6 text-center">
+                    <h3 class="text-2xl font-semibold text-[#8e525f] mb-2">Galleta de Avena y Chispas de Chocolate</h3>
+                    <p class="text-gray-600 mb-4">El clásico que nunca falla. Suave por dentro, crujiente por fuera y llena de trozos de chocolate.</p>
+                    <span class="text-2xl font-bold text-[#b76e79]">3 X $0.50</span>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Call to Action / Contact Section -->
+    <section id="contact" class="bg-[#b76e79] text-white py-16 md:py-24">
+        <div class="container mx-auto text-center px-4">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4">¡Haz tu Pedido Ahora!</h2>
+            <p class="text-lg md:text-xl font-medium mb-8">
+                Selecciona tus galletas favoritas y envíanos tu pedido por WhatsApp.
+            </p>
+            <!-- WhatsApp button with a placeholder phone number -->
+            <a href="https://wa.me/593969335224?text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20un%20pedido%20de%20galletas.%20" target="_blank" class="inline-flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                <span>Pedir por WhatsApp</span>
+            </a>
+            <!--<p class="mt-8 text-sm">
+                *Reemplaza 5939XXXXXXXXX con tu número de teléfono de WhatsApp en el código.
+            </p>-->
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-[#4b3d30] text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">
+                &copy; 2025 Las Galletas de Emy. Todos los derechos reservados.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
