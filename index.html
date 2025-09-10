@@ -15,26 +15,147 @@
             background-color: #f7f1e3;
             color: #4b3d30;
         }
+        /* Estilos para el menú acordeón en móviles */
+        .mobile-menu-items {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .mobile-menu-items.open {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+        @media (min-width: 768px) {
+            .mobile-menu-button {
+                display: none;
+            }
+            .mobile-menu-items {
+                max-height: none;
+            }
+        }
+        
+        /* Estilos para el carrito flotante en móviles */
+        .floating-cart {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 40;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #b76e79;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .floating-cart:hover {
+            transform: scale(1.05);
+        }
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #EF4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        @media (max-width: 767px) {
+            .floating-cart {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        
+        /* Estilos para la sección de ingredientes */
+        .ingredient-card {
+            transition: transform 0.3s ease;
+        }
+        .ingredient-card:hover {
+            transform: translateY(-5px);
+        }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- Header Section -->
     <header class="bg-white/50 backdrop-blur-md sticky top-0 z-50 shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="#" class="text-3xl font-bold text-[#b76e79]">Emy's Sweet Cookies</a>
-            <nav class="hidden md:flex space-x-6">
-                <a href="#about" class="hover:text-[#8e525f] transition duration-300">Nuestra Historia</a>
-                <a href="#products" class="hover:text-[#8e525f] transition duration-300">Productos</a>
-                <a href="#contact" class="hover:text-[#8e525f] transition duration-300">Contacto</a>
-            </nav>
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-3xl font-bold text-[#b76e79]">Emy's Sweet Cookies</a>
+                
+                <!-- Botón de menú para móviles -->
+                <button class="mobile-menu-button md:hidden text-gray-600 focus:outline-none" id="menu-toggle">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                
+                <!-- Menú para desktop (visible en pantallas md y superiores) -->
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="#about" class="hover:text-[#8e525f] transition duration-300">Nuestra Historia</a>
+                    <a href="#ingredients" class="hover:text-[#8e525f] transition duration-300">Ingredientes</a>
+                    <a href="#products" class="hover:text-[#8e525f] transition duration-300">Productos</a>
+                    <a href="#testimonials" class="hover:text-[#8e525f] transition duration-300">Recomendaciones</a>
+                    <a href="#contact" class="hover:text-[#8e525f] transition duration-300">Contacto</a>
+                    <button onclick="openModal()" class="text-gray-600 hover:text-[#8e525f] transition duration-300">
+                        🛒 Carrito (<span id="cart-count">0</span>)
+                    </button>
+                </nav>
+            </div>
+            
+            <!-- Menú para móviles (oculto por defecto, se muestra como acordeón) -->
+            <div class="mobile-menu-items mt-4 md:hidden" id="mobile-menu-items">
+                <div class="flex flex-col space-y-3">
+                    <a href="#about" class="block py-2 text-gray-600 hover:text-[#8e525f] transition duration-300">Nuestra Historia</a>
+                    <a href="#ingredients" class="block py-2 text-gray-600 hover:text-[#8e525f] transition duration-300">Ingredientes</a>
+                    <a href="#products" class="block py-2 text-gray-600 hover:text-[#8e525f] transition duration-300">Productos</a>
+                    <a href="#testimonials" class="block py-2 text-gray-600 hover:text-[#8e525f] transition duration-300">Recomendaciones</a>
+                    <a href="#contact" class="block py-2 text-gray-600 hover:text-[#8e525f] transition duration-300">Contacto</a>
+                    <button onclick="openModal()" class="block w-full text-left py-2 text-gray-600 hover:text-[#8e525f] transition duration-300">
+                        🛒 Carrito (<span id="cart-count-mobile">0</span>)
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
+
+    <!-- Carrito flotante para móviles -->
+    <div class="floating-cart" onclick="openModal()">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <div class="cart-badge hidden" id="floating-cart-count">0</div>
+    </div>
+
+    <!-- Modal del Carrito -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="bg-white p-8 rounded-xl shadow-lg w-11/12 md:w-1/2 lg:w-1/3">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-[#8e525f]">Carrito de Compras</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+            </div>
+            <div id="cart-items" class="max-h-80 overflow-y-auto mb-4">
+                <!-- Los productos se añadirán aquí con JavaScript -->
+            </div>
+            <div class="text-right font-bold text-xl mb-4">
+                Total: $<span id="cart-total">0.00</span>
+            </div>
+            <div class="flex flex-col space-y-3">
+                <button onclick="checkout()" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors duration-300">Finalizar Compra</button>
+                <button onclick="closeModal()" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full hover:bg-gray-600 transition-colors duration-300">Continuar Comprando</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
         <!-- Background image of cookies -->
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://solanda.teccial.com/images/galletas.jpg');"></div>
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://solanda.teccial.com/images/galletasedit2.jpg');"></div>
         <div class="absolute inset-0 bg-black opacity-30"></div>
         <div class="relative z-10 text-center text-white px-4">
             <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight drop-shadow-lg">Galletas con Amor, Hechas a Mano</h1>
@@ -61,49 +182,161 @@
         </div>
     </section>
 
+    <!-- Ingredients Section -->
+    <section id="ingredients" class="bg-[#f8f4eb] py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-[#b76e79]">Ingredientes de Calidad</h2>
+            
+            <div class="flex flex-col md:flex-row items-center justify-center gap-10">
+                <!-- Imagen de ingredientes -->
+                <div class="md:w-2/5">
+                    <img src="https://solanda.teccial.com/images/galletasa1.jpg" alt="Ingredientes para galletas" class="rounded-3xl shadow-lg">
+                </div>
+                
+                <!-- Texto descriptivo -->
+                <div class="md:w-2/5 space-y-8">
+                    <div class="ingredient-card bg-white p-6 rounded-2xl shadow-md">
+                        <h3 class="text-2xl font-bold text-[#8e525f] mb-2">Avena Integral</h3>
+                        <p class="text-gray-700">53% de avena para una textura suave y nutritiva. ¡Pura fibra y energía!</p>
+                    </div>
+                    
+                    <div class="ingredient-card bg-white p-6 rounded-2xl shadow-md">
+                        <h3 class="text-2xl font-bold text-[#8e525f] mb-2">Chispas de Chocolate</h3>
+                        <p class="text-gray-700">Semi-amargo, que se derriten en cada bocado para un placer único.</p>
+                    </div>
+                    
+                    <div class="ingredient-card bg-white p-6 rounded-2xl shadow-md">
+                        <h3 class="text-2xl font-bold text-[#8e525f] mb-2">Hechas con Cariño</h3>
+                        <p class="text-gray-700">Sin conservantes ni colorantes. ¡Sabor casero, puro y auténtico!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Products Section -->
     <section id="products" class="container mx-auto px-4 py-16 md:py-24">
         <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-[#b76e79]">Nuestros Deliciosos Productos</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
             <!-- Product Card 1 -->
-            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                <!-- Placeholder for cookie image -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300" data-product-id="1" data-name="Galleta de Avena y Chispas de Chocolate" data-price="0.50">
                 <img src="https://solanda.teccial.com/images/galletasok3.png" alt="Galleta de Chispas de Chocolate" class="w-full h-48 object-cover">
                 <div class="p-6 text-center">
                     <h3 class="text-2xl font-semibold text-[#8e525f] mb-2">Galleta de Avena y Chispas de Chocolate</h3>
                     <p class="text-gray-600 mb-4">El clásico que nunca falla. Suave por dentro, crujiente por fuera y llena de trozos de chocolate.</p>
                     <span class="text-2xl font-bold text-[#b76e79]">3 X $0.50</span>
+                    <button onclick="addToCart(this)" class="mt-4 w-full bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full hover:bg-[#8e525f] transition-colors duration-300">
+                        Añadir al Carrito
+                    </button>
                 </div>
             </div>
 
             <!-- Product Card 2 -->
-            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                <!-- Placeholder for cookie image -->
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300" data-product-id="2" data-name="Brownie de chocolate" data-price="0.50">
                 <img src="https://solanda.teccial.com/images/brownie.jpg" alt="Galleta de Avena y Pasas" class="w-full h-48 object-cover">
                 <div class="p-6 text-center">
                     <h3 class="text-2xl font-semibold text-[#8e525f] mb-2">Brownie de chocolate</h3>
                     <p class="text-gray-600 mb-4">Un delicioso y húmedo brownie de chocolate con un toque natural de banana, que le aporta un extra de dulzura y suavidad.</p>
                     <span class="text-2xl font-bold text-[#b76e79]">$0.50 c/u</span>
+                    <button onclick="addToCart(this)" class="mt-4 w-full bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full hover:bg-[#8e525f] transition-colors duration-300">
+                        Añadir al Carrito
+                    </button>
                 </div>
             </div>
 
-            <!-- Product Card 3 
-            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                <!-- Placeholder for cookie image 
-                <img src="https://solanda.teccial.com/images/galletas2.jpg" alt="Galleta de Mantequilla con Glaseado" class="w-full h-48 object-cover">
-                <div class="p-6 text-center">
-                    <h3 class="text-2xl font-semibold text-[#8e525f] mb-2">Galleta de Avena y Chispas de Chocolate</h3>
-                    <p class="text-gray-600 mb-4">El clásico que nunca falla. Suave por dentro, crujiente por fuera y llena de trozos de chocolate.</p>
-                    <span class="text-2xl font-bold text-[#b76e79]">3 X $0.50</span>
-                </div>
-            </div>-->
-            
         </div>
     </section>
 
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="bg-[#f8f4eb] py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-[#b76e79]">¿Por qué nos recomiendan?</h2>
+            <p class="text-xl text-center mb-12 text-gray-700">Usuarios felices y dulces momentos.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonio 1 -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-xl">
+                            ★★★★★
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"Las galletas de Emy son simplemente deliciosas. Me encanta que usa ingredientes naturales y se nota el amor en cada bocado."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-[#b76e79] rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            D
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Darian</h4>
+                            <p class="text-sm text-gray-500">Cliente frecuente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonio 2 -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-xl">
+                            ★★★★★
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"Compré las galletas para la fiesta de mi hija y fueron un éxito total. Todos preguntaban dónde las había comprado."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-[#b76e79] rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            A
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Anita</h4>
+                            <p class="text-sm text-gray-500">Mamá satisfecho</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonio 3 -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-xl">
+                            ★★★★★
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">"El brownie de chocolate es mi debilidad. Es esponjoso, con el punto justo de dulce y ese toque de banana es increíble."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-[#b76e79] rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            E
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Estefanía</h4>
+                            <p class="text-sm text-gray-500">Amante del chocolate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Subscription Section - Versión Simplificada -->
+<section class="bg-[#b76e79] py-16 md:py-24 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-4xl md:text-5xl font-bold mb-4">Súmate a la Dulzura</h2>
+        <p class="text-xl font-medium mb-8">Recibe promociones exclusivas y novedades sobre nuestras galletas.</p>
+        
+        <!-- Formulario simple que redirige a Mailchimp -->
+        <form action="https://formspree.io/f/mdklbbwr" method="POST" class="max-w-md mx-auto">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <input type="email" name="email" placeholder="Tu correo electrónico" required 
+                    class="flex-grow px-4 py-3 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#8e525f]">
+                <button type="submit" class="bg-white text-[#b76e79] font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition-colors duration-300">
+                    Suscribirse
+                </button>
+            </div>
+        </form>
+        <p class="mt-4 text-sm">Nos preocupamos por tu privacidad. Puedes darte de baja en cualquier momento.</p>
+    </div>
+</section>
+
     <!-- Call to Action / Contact Section -->
-    <section id="contact" class="bg-[#b76e79] text-white py-16 md:py-24">
+    <section id="contact" class="bg-[#8e525f] text-white py-16 md:py-24">
         <div class="container mx-auto text-center px-4">
             <h2 class="text-4xl md:text-5xl font-bold mb-4">¡Haz tu Pedido Ahora!</h2>
             <p class="text-lg md:text-xl font-medium mb-8">
@@ -114,9 +347,6 @@
                 <i class="fab fa-whatsapp text-2xl"></i>
                 <span>Pedir por WhatsApp</span>
             </a>
-            <!--<p class="mt-8 text-sm">
-                *Reemplaza 5939XXXXXXXXX con tu número de teléfono de WhatsApp en el código.
-            </p>-->
         </div>
     </section>
 
@@ -129,16 +359,178 @@
         </div>
     </footer>
 
+    <script>
+        // ===== CÓDIGO DEL CARRITO =====
+        const cart = [];
+        const cartModal = document.getElementById('cart-modal');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotalSpan = document.getElementById('cart-total');
+        const cartCountSpan = document.getElementById('cart-count');
+        const cartCountMobileSpan = document.getElementById('cart-count-mobile');
+        const floatingCartCount = document.getElementById('floating-cart-count');
+
+        function updateCart() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('flex', 'justify-between', 'items-center', 'mb-2', 'p-2', 'bg-gray-100', 'rounded');
+                itemElement.innerHTML = `
+                    <span>${item.name} (${item.quantity})</span>
+                    <div class="flex items-center space-x-2">
+                        <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                        <button onclick="removeFromCart('${item.id}')" class="text-red-500 hover:text-red-700 font-bold text-lg leading-none">&times;</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(itemElement);
+                total += item.price * item.quantity;
+            });
+
+            cartTotalSpan.textContent = total.toFixed(2);
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCountSpan.textContent = cartCount;
+            cartCountMobileSpan.textContent = cartCount;
+            floatingCartCount.textContent = cartCount;
+            
+            // Ocultar/mostrar badge del carrito flotante
+            if (cartCount > 0) {
+                floatingCartCount.classList.remove('hidden');
+            } else {
+                floatingCartCount.classList.add('hidden');
+            }
+        }
+
+        function addToCart(button) {
+            const productCard = button.closest('[data-product-id]');
+            const productId = productCard.dataset.productId;
+            const productName = productCard.dataset.name;
+            const productPrice = parseFloat(productCard.dataset.price);
+
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    quantity: 1
+                });
+            }
+
+            updateCart();
+            
+            // Efecto de confirmación visual
+            const floatingCart = document.querySelector('.floating-cart');
+            floatingCart.classList.add('animate-pulse');
+            setTimeout(() => {
+                floatingCart.classList.remove('animate-pulse');
+            }, 1000);
+        }
+
+        function removeFromCart(productId) {
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity--;
+                if (existingItem.quantity === 0) {
+                    const itemIndex = cart.findIndex(item => item.id === productId);
+                    cart.splice(itemIndex, 1);
+                }
+            }
+            updateCart();
+        }
+
+        function openModal() {
+            cartModal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            cartModal.classList.add('hidden');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                const messageBox = document.createElement('div');
+                messageBox.innerHTML = `
+                    <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                        <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                            <p class="text-lg font-semibold mb-4">El carrito de compras está vacío.</p>
+                            <button onclick="this.closest('.fixed').remove()" class="bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full">Cerrar</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(messageBox);
+                return;
+            }
+
+            const phoneNumber = '593963596148';
+            const messageHeader = 'Hola, me gustaría realizar el siguiente pedido de galletas:\n\n';
+            let messageBody = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                messageBody += `${item.name} x ${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
+                total += item.price * item.quantity;
+            });
+
+            const messageFooter = `\nTotal: $${total.toFixed(2)}\n\n¡Gracias!`;
+            const fullMessage = encodeURIComponent(messageHeader + messageBody + messageFooter);
+            
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${fullMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+            closeModal();
+            cart.length = 0;
+            updateCart();
+        }
+        
+        // ===== CÓDIGO PARA EL MENÚ ACORDEÓN EN MÓVILES =====
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menuItems = document.getElementById('mobile-menu-items');
+            menuItems.classList.toggle('open');
+            
+            // Cambiar icono según el estado
+            const icon = this.querySelector('i');
+            if (menuItems.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Cerrar el menú al hacer clic en un enlace (solo en móviles)
+        document.querySelectorAll('#mobile-menu-items a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('mobile-menu-items').classList.remove('open');
+                document.getElementById('menu-toggle').querySelector('i').classList.remove('fa-times');
+                document.getElementById('menu-toggle').querySelector('i').classList.add('fa-bars');
+            });
+        });
+        
+        // Inicializar el carrito
+        updateCart();
+    </script>
+
+    <!-- Mailchimp Integration Script -->
+    <script src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+    <script>
+        (function($) {
+            window.fnames = new Array(); 
+            window.ftypes = new Array();
+            fnames[0]='EMAIL';
+            ftypes[0]='email';
+            fnames[1]='FNAME';
+            ftypes[1]='text';
+            fnames[2]='LNAME';
+            ftypes[2]='text';
+        }(jQuery));
+        
+        var $mcj = jQuery.noConflict(true);
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
