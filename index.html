@@ -235,7 +235,7 @@
     <section class="relative h-[60vh] md:h-[80vh] flex items-center justify-center">
         <!-- Background image of cookies -->
         <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://solanda.teccial.com/images/arreglo3.jpg');"></div>
-        <div class="absolute inset-0 bg-black opacity-30"></div>
+        <div class="absolute inset-0 bg-black opacity-40"></div>
         <div class="relative z-10 text-center text-white px-4">
             <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight drop-shadow-lg">Galletas con Amor, Hechas a Mano</h1>
             <p class="mt-4 text-xl md:text-2xl font-medium drop-shadow-md">Cada bocado es una historia de sabor y alegría.</p>
@@ -244,6 +244,12 @@
             </a>
         </div>
     </section>
+
+    <div class="bg-[#f8d7da] py-3">
+    <div class="container mx-auto text-center">
+        <p class="text-[#721c24] font-medium"><i class="fas fa-exclamation-circle mr-2"></i>¡Solo horneamos 50 unidades diarias! Pedir con anticipación</p>
+    </div>
+</div>
 
     <!-- About Section -->
     <section id="about" class="container mx-auto px-4 py-16 md:py-24">
@@ -331,7 +337,7 @@
     <section id="testimonials" class="bg-[#f8f4eb] py-16 md:py-24">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-[#b76e79]">¿Por qué nos recomiendan?</h2>
-            <p class="text-xl text-center mb-12 text-gray-700">Usuarios felices y dulces momentos.</p>
+            <p class="text-xl text-center mb-12 font-bold">Usuarios felices y dulces momentos.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Testimonio 1 -->
@@ -341,7 +347,7 @@
                             ★★★★★
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-4">"Las galletas de Emy son simplemente deliciosas. Me encanta que usa ingredientes naturales y se nota el amor en cada bocado."</p>
+                    <p class="text-gray-700 italic mb-4">"Las galletas de Emy son simplemente deliciosas. Me encanta que usa ingredientes naturales y se nota el amor en cada bocado."</p>
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-[#b76e79] rounded-full flex items-center justify-center text-white font-bold mr-3">
                             D
@@ -360,7 +366,7 @@
                             ★★★★★
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-4">"Compré las galletas para la fiesta de mi hija y fueron un éxito total. Todos preguntaban dónde las había comprado."</p>
+                    <p class="text-gray-700 italic mb-4">"Compré las galletas para la fiesta de mi hija y fueron un éxito total. Todos preguntaban dónde las había comprado."</p>
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-[#b76e79] rounded-full flex items-center justify-center text-white font-bold mr-3">
                             A
@@ -379,7 +385,7 @@
                             ★★★★★
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-4">"El brownie de chocolate es mi debilidad. Es esponjoso, con el punto justo de dulce y ese toque de banana es increíble."</p>
+                    <p class="text-gray-700 italic mb-4">"El brownie de chocolate es mi debilidad. Es esponjoso, con el punto justo de dulce y ese toque de banana es increíble."</p>
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-[#b76e79] rounded-full flex items-center justify-center text-white font-bold mr-3">
                             E
@@ -429,14 +435,66 @@
         </div>
     </section>
 
+    <!-- Añadir antes del footer -->
+<div class="bg-gray-100 py-10">
+    <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8 text-center">
+            <div>
+                <i class="fas fa-shipping-fast text-3xl text-[#b76e79] mb-3"></i>
+                <h3 class="font-semibold">Envío Rápido</h3>
+                <p class="text-sm">Entrega en 24-48 horas</p>
+            </div>
+            <div>
+                <i class="fas fa-cookie-bite text-3xl text-[#b76e79] mb-3"></i>
+                <h3 class="font-semibold">Frescas Siempre</h3>
+                <p class="text-sm">Horneadas el mismo día</p>
+            </div>
+            <div>
+                <i class="fas fa-heart text-3xl text-[#b76e79] mb-3"></i>
+                <h3 class="font-semibold">Hecho con Amor</h3>
+                <p class="text-sm">Cada galleta tiene dedicación</p>
+            </div>
+            <div>
+                <i class="fas fa-leaf text-3xl text-[#b76e79] mb-3"></i>
+                <h3 class="font-semibold">Ingredientes Naturales</h3>
+                <p class="text-sm">Sin conservantes artificiales</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Section -->
     <footer class="bg-[#4b3d30] text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-sm">
-                &copy; 2025 Las Galletas de Emy. Todos los derechos reservados.
-            </p>
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <p class="text-sm">
+                    &copy; 2025 Las Galletas de Emy. Todos los derechos reservados.
+                </p>
+            </div>
+            
+            <!-- Redes Sociales -->
+            <div class="flex space-x-4">
+                <a href="https://www.instagram.com/tu_usuario" target="_blank" class="bg-white text-[#4b3d30] rounded-full w-10 h-10 flex items-center justify-center transition-transform hover:scale-110">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/tu_pagina" target="_blank" class="bg-white text-[#4b3d30] rounded-full w-10 h-10 flex items-center justify-center transition-transform hover:scale-110">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <!--<a href="https://wa.me/tunúmero" target="_blank" class="bg-white text-[#4b3d30] rounded-full w-10 h-10 flex items-center justify-center transition-transform hover:scale-110">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://www.tiktok.com/@tu_usuario" target="_blank" class="bg-white text-[#4b3d30] rounded-full w-10 h-10 flex items-center justify-center transition-transform hover:scale-110">
+                    <i class="fab fa-tiktok"></i>
+                </a>-->
+            </div>
         </div>
-    </footer>
+        
+        <!-- Información de contacto adicional 
+        <div class="mt-6 text-center text-xs opacity-80">
+            <p>Horario de atención: Lunes a Sábado 9:00 AM - 6:00 PM</p>
+        </div>-->
+    </div>
+</footer>
 
     <script>
         // Variables globales
@@ -673,7 +731,3 @@
     </script>
 </body>
 </html>
-
-
-
-
