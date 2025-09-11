@@ -12,6 +12,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Las Galletas de Emy</title>
+
+    <!-- Google tag (gtag.js) - Colocar JUSTO después de <head> -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0TBR803FT9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-0TBR803FT9');
+    </script>
+    <!-- Fin de Google Analytics -->
+
+    <script>
+// Función para trackear clics en WhatsApp
+function trackWhatsAppClick(producto = 'general') {
+  gtag('event', 'whatsapp_click', {
+    'event_category': 'conversion',
+    'event_label': producto,
+    'value': 1
+  });
+}
+
+// Función para trackear visualización de productos
+function trackProductView(producto) {
+  gtag('event', 'view_product', {
+    'event_category': 'engagement', 
+    'event_label': producto
+  });
+}
+
+// Trackear automáticamente las visualizaciones de productos
+document.addEventListener('DOMContentLoaded', function() {
+  // Trackear scroll hasta productos después de 3 segundos
+  setTimeout(function() {
+    const productsSection = document.getElementById('products');
+    if (productsSection) {
+      gtag('event', 'view_product_section', {
+        'event_category': 'engagement',
+        'event_label': 'section_visibility'
+      });
+    }
+  }, 3000);
+});
+</script>
+ 
     <!-- Incluye Tailwind CSS para un estilo moderno y responsivo -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Incluye el icono de WhatsApp para el botón de contacto -->
@@ -509,10 +554,16 @@
                     <i class="fab fa-facebook-f"></i>
                 </a>
                 
-                <!-- WhatsApp -->
+                <!-- WhatsApp 
                 <a href="https://wa.me/593963596148" target="_blank" 
                    class="bg-[#25D366] text-white rounded-full w-10 h-10 flex items-center justify-center transition-transform hover:scale-110">
                     <i class="fab fa-whatsapp"></i>
+                </a>-->
+                <!-- Ejemplo de botón DESPUÉS (con tracking) -->
+                <a href="https://wa.me/593963596148" 
+                   onclick="trackWhatsAppClick('galletas_avena_chocolate')" 
+                   class=""bg-[#25D366] text-white rounded-full w-10 h-10 flex items-center justify-center transition-transform hover:scale-110"">
+                   Pedir por WhatsApp
                 </a>
             </div>
         </div>
@@ -759,4 +810,5 @@
     </script>
 </body>
 </html>
+
 
