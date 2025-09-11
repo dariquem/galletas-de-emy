@@ -74,7 +74,8 @@
                 justify-content: center;
             }
         }
-        
+
+               
         /* Estilos para la sección de ingredientes */
         .ingredient-card {
             transition: transform 0.3s ease;
@@ -82,6 +83,62 @@
         .ingredient-card:hover {
             transform: translateY(-5px);
         }
+
+         /* Estilos para los contadores */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #b76e79;
+            color: white;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .quantity-btn:hover { background-color: #8e525f; }
+        .quantity-input {
+            width: 50px;
+            height: 35px;
+            text-align: center;
+            margin: 0 10px;
+            border: 2px solid #b76e79;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        /* Modal de agregar al carrito */
+        .add-to-cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 60;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -100,11 +157,9 @@
                 <!-- Menú para desktop (visible en pantallas md y superiores) -->
                 <nav class="hidden md:flex space-x-6 items-center">
                     <a href="#about" class="hover:text-[#8e525f] transition duration-300">Nuestra Historia</a>
-                    <a href="#ingredients" class="hover:text-[#8e525f] transition duration-300">Ingredientes</a>
                     <a href="#products" class="hover:text-[#8e525f] transition duration-300">Productos</a>
-                    <a href="#testimonials" class="hover:text-[#8e525f] transition duration-300">Recomendaciones</a>
                     <a href="#contact" class="hover:text-[#8e525f] transition duration-300">Contacto</a>
-                    <button onclick="openModal()" class="text-gray-600 hover:text-[#8e525f] transition duration-300">
+                    <button onclick="openCartModal()" class="text-gray-600 hover:text-[#8e525f] transition duration-300">
                         🛒 Carrito (<span id="cart-count">0</span>)
                     </button>
                 </nav>
@@ -132,23 +187,47 @@
         <div class="cart-badge hidden" id="floating-cart-count">0</div>
     </div>
 
+
+    <!-- Modal para agregar productos al carrito -->
+    <div id="add-to-cart-modal" class="add-to-cart-modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-[#8e525f]" id="modal-product-name">Producto</h3>
+                <button onclick="closeAddToCartModal()" class="text-gray-500 hover:text-gray-800 text-xl font-bold">&times;</button>
+            </div>
+            <img id="modal-product-image" src="" alt="Producto" class="w-full h-40 object-cover rounded-lg mb-4">
+            <p id="modal-product-description" class="text-gray-600 mb-4"></p>
+            <p class="text-lg font-bold text-[#b76e79] mb-4" id="modal-product-price">$0.00</p>
+            
+            <div class="quantity-selector">
+                <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                <input type="number" id="product-quantity" class="quantity-input" value="1" min="1" max="99">
+                <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+            </div>
+            
+            <button onclick="addToCartWithQuantity()" class="w-full bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full hover:bg-[#8e525f] transition-colors duration-300">
+                Añadir al Carrito
+            </button>
+        </div>
+    </div>
+
     <!-- Modal del Carrito -->
     <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
-        <div class="bg-white p-8 rounded-xl shadow-lg w-11/12 md:w-1/2 lg:w-1/3">
+        <div class="bg-white p-6 rounded-xl shadow-lg w-11/12 md:w-3/4 lg:w-1/2 max-h-[80vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-bold text-[#8e525f]">Carrito de Compras</h2>
-                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+                <button onclick="closeCartModal()" class="text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
             </div>
-            <div id="cart-items" class="max-h-80 overflow-y-auto mb-4">
-                <!-- Los productos se añadirán aquí con JavaScript -->
+            <div id="cart-items" class="mb-4">
+                <!-- Los elementos del carrito se insertarán aquí -->
             </div>
-            <div class="text-right font-bold text-xl mb-4">
-                Total: $<span id="cart-total">0.00</span>
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-lg font-semibold">Total:</span>
+                <span id="cart-total" class="text-lg font-bold">$0.00</span>
             </div>
-            <div class="flex flex-col space-y-3">
-                <button onclick="checkout()" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors duration-300">Finalizar Compra</button>
-                <button onclick="closeModal()" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full hover:bg-gray-600 transition-colors duration-300">Continuar Comprando</button>
-            </div>
+            <button onclick="checkout()" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition-colors duration-300">
+                Realizar Pedido por WhatsApp
+            </button>
         </div>
     </div>
 
@@ -215,31 +294,31 @@
     </section>
 
     <!-- Products Section -->
-    <section id="products" class="container mx-auto px-4 py-16 md:py-24">
+    <section id="products" class="container mx-auto px-4 py-16">
         <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-[#b76e79]">Nuestros Deliciosos Productos</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
             <!-- Product Card 1 -->
-            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300" data-product-id="1" data-name="Galleta de Avena y Chispas de Chocolate" data-price="0.50">
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
                 <img src="https://solanda.teccial.com/images/galletasok3.png" alt="Galleta de Chispas de Chocolate" class="w-full h-48 object-cover">
                 <div class="p-6 text-center">
                     <h3 class="text-2xl font-semibold text-[#8e525f] mb-2">Galleta de Avena y Chispas de Chocolate</h3>
                     <p class="text-gray-600 mb-4">El clásico que nunca falla. Suave por dentro, crujiente por fuera y llena de trozos de chocolate.</p>
                     <span class="text-2xl font-bold text-[#b76e79]">3 X $0.50</span>
-                    <button onclick="addToCart(this)" class="mt-4 w-full bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full hover:bg-[#8e525f] transition-colors duration-300">
+                    <button onclick="openAddToCartModal('1', 'Galleta de Avena y Chispas de Chocolate', 0.5, 'https://solanda.teccial.com/images/galletasok3.png', 'El clásico que nunca falla. Suave por dentro, crujiente por fuera y llena de trozos de chocolate.')" class="mt-4 w-full bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full hover:bg-[#8e525f] transition-colors duration-300">
                         Añadir al Carrito
                     </button>
                 </div>
             </div>
 
             <!-- Product Card 2 -->
-            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300" data-product-id="2" data-name="Brownie de chocolate" data-price="0.50">
-                <img src="https://solanda.teccial.com/images/brownie.jpg" alt="Galleta de Avena y Pasas" class="w-full h-48 object-cover">
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                <img src="https://solanda.teccial.com/images/brownie.jpg" alt="Brownie de chocolate" class="w-full h-48 object-cover">
                 <div class="p-6 text-center">
                     <h3 class="text-2xl font-semibold text-[#8e525f] mb-2">Brownie de chocolate</h3>
                     <p class="text-gray-600 mb-4">Un delicioso y húmedo brownie de chocolate con un toque natural de banana, que le aporta un extra de dulzura y suavidad.</p>
                     <span class="text-2xl font-bold text-[#b76e79]">$0.50 c/u</span>
-                    <button onclick="addToCart(this)" class="mt-4 w-full bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full hover:bg-[#8e525f] transition-colors duration-300">
+                    <button onclick="openAddToCartModal('2', 'Brownie de chocolate', 0.5, 'https://solanda.teccial.com/images/brownie.jpg', 'Un delicioso y húmedo brownie de chocolate con un toque natural de banana, que le aporta un extra de dulzura y suavidad.')" class="mt-4 w-full bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full hover:bg-[#8e525f] transition-colors duration-300">
                         Añadir al Carrito
                     </button>
                 </div>
@@ -288,7 +367,7 @@
                         </div>
                         <div>
                             <h4 class="font-semibold">Anita</h4>
-                            <p class="text-sm text-gray-500">Mamá satisfecha</p>
+                            <p class="text-sm text-gray-500">Mamá satisfecho</p>
                         </div>
                     </div>
                 </div>
@@ -340,7 +419,7 @@
         <div class="container mx-auto text-center px-4">
             <h2 class="text-4xl md:text-5xl font-bold mb-4">¡Haz tu Pedido Ahora!</h2>
             <p class="text-lg md:text-xl font-medium mb-8">
-               Selecciona tus galletas favoritas y agrégalos al carrito de compras. Si tienes dudas, escríbenos por WhatsApp.
+                Selecciona tus galletas favoritas y agrégalos al carrito de compras. Si tienes dudas, escríbenos por WhatsApp.
             </p>
             <!-- WhatsApp button with a placeholder phone number -->
             <a href="https://wa.me/593963596148?text=Hola%2C%20me%20gustar%C3%ADa%20hacer%20un%20pedido%20de%20galletas.%20" target="_blank" class="inline-flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
@@ -360,27 +439,112 @@
     </footer>
 
     <script>
-        // ===== CÓDIGO DEL CARRITO =====
-        const cart = [];
+        // Variables globales
+        let cart = [];
+        let currentProduct = null;
         const cartModal = document.getElementById('cart-modal');
+        const addToCartModal = document.getElementById('add-to-cart-modal');
         const cartItemsContainer = document.getElementById('cart-items');
         const cartTotalSpan = document.getElementById('cart-total');
         const cartCountSpan = document.getElementById('cart-count');
         const cartCountMobileSpan = document.getElementById('cart-count-mobile');
         const floatingCartCount = document.getElementById('floating-cart-count');
 
+        // Función para abrir el modal de agregar al carrito
+        function openAddToCartModal(id, name, price, image, description) {
+            currentProduct = { id, name, price, image, description };
+            document.getElementById('modal-product-name').textContent = name;
+            document.getElementById('modal-product-image').src = image;
+            document.getElementById('modal-product-description').textContent = description;
+            document.getElementById('modal-product-price').textContent = `$${price.toFixed(2)} c/u`;
+            document.getElementById('product-quantity').value = 1;
+            addToCartModal.style.display = 'flex';
+        }
+
+        // Función para cerrar el modal de agregar al carrito
+        function closeAddToCartModal() {
+            addToCartModal.style.display = 'none';
+        }
+
+        // Función para aumentar la cantidad
+        function increaseQuantity() {
+            const quantityInput = document.getElementById('product-quantity');
+            if (parseInt(quantityInput.value) < 99) {
+                quantityInput.value = parseInt(quantityInput.value) + 1;
+            }
+        }
+
+        // Función para disminuir la cantidad
+        function decreaseQuantity() {
+            const quantityInput = document.getElementById('product-quantity');
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        }
+
+        // Función para agregar producto al carrito con cantidad específica
+        function addToCartWithQuantity() {
+            const quantity = parseInt(document.getElementById('product-quantity').value);
+            
+            const existingItem = cart.find(item => item.id === currentProduct.id);
+
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: currentProduct.id,
+                    name: currentProduct.name,
+                    price: currentProduct.price,
+                    quantity: quantity,
+                    image: currentProduct.image
+                });
+            }
+
+            updateCart();
+            closeAddToCartModal();
+            
+            // Mostrar notificación
+            showNotification(`${quantity} ${currentProduct.name} agregado(s) al carrito`);
+        }
+
+        // Función para mostrar notificación
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Función para actualizar el carrito
         function updateCart() {
             cartItemsContainer.innerHTML = '';
             let total = 0;
 
             cart.forEach(item => {
                 const itemElement = document.createElement('div');
-                itemElement.classList.add('flex', 'justify-between', 'items-center', 'mb-2', 'p-2', 'bg-gray-100', 'rounded');
+                itemElement.classList.add('flex', 'justify-between', 'items-center', 'mb-4', 'p-3', 'bg-gray-100', 'rounded-lg');
                 itemElement.innerHTML = `
-                    <span>${item.name} (${item.quantity})</span>
-                    <div class="flex items-center space-x-2">
-                        <span>$${(item.price * item.quantity).toFixed(2)}</span>
-                        <button onclick="removeFromCart('${item.id}')" class="text-red-500 hover:text-red-700 font-bold text-lg leading-none">&times;</button>
+                    <div class="flex items-center">
+                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-md mr-3">
+                        <div>
+                            <h4 class="font-semibold">${item.name}</h4>
+                            <p class="text-sm text-gray-600">$${item.price.toFixed(2)} c/u</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex items-center mr-4">
+                            <button onclick="decreaseCartItem('${item.id}')" class="quantity-btn">-</button>
+                            <span class="mx-2 font-bold">${item.quantity}</span>
+                            <button onclick="increaseCartItem('${item.id}')" class="quantity-btn">+</button>
+                        </div>
+                        <span class="font-bold">$${(item.price * item.quantity).toFixed(2)}</span>
+                        <button onclick="removeFromCart('${item.id}')" class="ml-3 text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 `;
                 cartItemsContainer.appendChild(itemElement);
@@ -393,7 +557,6 @@
             cartCountMobileSpan.textContent = cartCount;
             floatingCartCount.textContent = cartCount;
             
-            // Ocultar/mostrar badge del carrito flotante
             if (cartCount > 0) {
                 floatingCartCount.classList.remove('hidden');
             } else {
@@ -401,73 +564,49 @@
             }
         }
 
-        function addToCart(button) {
-            const productCard = button.closest('[data-product-id]');
-            const productId = productCard.dataset.productId;
-            const productName = productCard.dataset.name;
-            const productPrice = parseFloat(productCard.dataset.price);
-
-            const existingItem = cart.find(item => item.id === productId);
-
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({
-                    id: productId,
-                    name: productName,
-                    price: productPrice,
-                    quantity: 1
-                });
+        // Función para aumentar cantidad en el carrito
+        function increaseCartItem(productId) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity++;
+                updateCart();
             }
-
-            updateCart();
-            
-            // Efecto de confirmación visual
-            const floatingCart = document.querySelector('.floating-cart');
-            floatingCart.classList.add('animate-pulse');
-            setTimeout(() => {
-                floatingCart.classList.remove('animate-pulse');
-            }, 1000);
         }
 
+        // Función para disminuir cantidad en el carrito
+        function decreaseCartItem(productId) {
+            const item = cart.find(item => item.id === productId);
+            if (item && item.quantity > 1) {
+                item.quantity--;
+                updateCart();
+            }
+        }
+
+        // Función para eliminar producto del carrito
         function removeFromCart(productId) {
-            const existingItem = cart.find(item => item.id === productId);
-
-            if (existingItem) {
-                existingItem.quantity--;
-                if (existingItem.quantity === 0) {
-                    const itemIndex = cart.findIndex(item => item.id === productId);
-                    cart.splice(itemIndex, 1);
-                }
-            }
+            cart = cart.filter(item => item.id !== productId);
             updateCart();
         }
 
-        function openModal() {
+        // Función para abrir el modal del carrito
+        function openCartModal() {
             cartModal.classList.remove('hidden');
         }
 
-        function closeModal() {
+        // Función para cerrar el modal del carrito
+        function closeCartModal() {
             cartModal.classList.add('hidden');
         }
 
+        // Función para finalizar la compra
         function checkout() {
             if (cart.length === 0) {
-                const messageBox = document.createElement('div');
-                messageBox.innerHTML = `
-                    <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div class="bg-white p-6 rounded-xl shadow-lg text-center">
-                            <p class="text-lg font-semibold mb-4">El carrito de compras está vacío.</p>
-                            <button onclick="this.closest('.fixed').remove()" class="bg-[#b76e79] text-white font-bold py-2 px-4 rounded-full">Cerrar</button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(messageBox);
+                showNotification('El carrito de compras está vacío.');
                 return;
             }
 
             const phoneNumber = '593963596148';
-            const messageHeader = 'Hola, me gustaría realizar el siguiente pedido de galletas:\n\n';
+            const messageHeader = 'Hola, me gustaría realizar el siguiente pedido:\n\n';
             let messageBody = '';
             let total = 0;
 
@@ -482,11 +621,11 @@
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${fullMessage}`;
 
             window.open(whatsappUrl, '_blank');
-            closeModal();
-            cart.length = 0;
+            closeCartModal();
+            cart = [];
             updateCart();
         }
-        
+
         // ===== CÓDIGO PARA EL MENÚ ACORDEÓN EN MÓVILES =====
         document.getElementById('menu-toggle').addEventListener('click', function() {
             const menuItems = document.getElementById('mobile-menu-items');
@@ -511,7 +650,7 @@
                 document.getElementById('menu-toggle').querySelector('i').classList.add('fa-bars');
             });
         });
-        
+
         // Inicializar el carrito
         updateCart();
     </script>
@@ -534,4 +673,3 @@
     </script>
 </body>
 </html>
-
